@@ -1,12 +1,9 @@
 -module(chunk).
--export([disassemble/1, test/0]).
+-export([disassemble/1, test/0, start_chunk/0, debug_value/1, get_instruction/2]).
 
--record(chunk, {
-  instructions = [],
-  constants = []
-}).
+-include("schema.hrl").
 
-debug_constant(Value) -> io:format("constant value: ~w ~n", [Value]).
+debug_value({value, Value}) -> io:format("value: ~w ~n", [Value]).
 
 debug_instruction(Op) -> io:format("instruction: ~w ~n", [Op]).
 
@@ -23,7 +20,7 @@ disassemble_instruction(Chunk, Offset)  ->
       {op, return} -> Offset + 1;
       {op, constant} -> 
         Value = get_instruction(Chunk, Offset + 1),
-        debug_constant(Value),
+        debug_value(Value),
         Offset + 2
       end.
 
